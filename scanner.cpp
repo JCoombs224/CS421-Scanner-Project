@@ -27,32 +27,13 @@ bool isVowel(char c)
 }
 
 // WORD DFA
-// Done by: **
-// RE:   **
+// Done by: Jamison Coombs
+// RE:   Lilly <last-name>, Tim <last-name>
 bool word(string s)
 {
   int state = 0;
   int charpos = 0;
-  /* replace the following todo the word dfa  **
-  while (s[charpos] != '\0')
-    {
-      if (state == 0 && s[charpos] == 'a')
-      state = 1;
-      else
-      if (state == 1 && s[charpos] == 'b')
-      state = 2;
-      else
-      if (state == 2 && s[charpos] == 'b')
-      state = 2;
-      else
-    return(false);
-      charpos++;
-    }//end of while
 
-  // where did I end up????
-  if (state == 2) return(true);  // end in a final state
-   else return(false);
-  */
   while(s[charpos] != '\0') 
   {
     char c = s[charpos];
@@ -160,7 +141,7 @@ bool word(string s)
 }
 
 // PERIOD DFA
-// Done by: **
+// Done by: Jamison Coombs
 bool period(string s)
 {
   int state = 0;
