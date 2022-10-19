@@ -23,7 +23,7 @@ bool isConsonantEnd(char c)
 
 bool isVowel(char c)
 {
-  return(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
+  return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'E' || c == 'I');
 }
 
 // WORD DFA
@@ -34,91 +34,91 @@ bool word(string s)
   int state = 0;
   int charpos = 0;
 
-  while(s[charpos] != '\0') 
+  while (s[charpos] != '\0')
   {
     char c = s[charpos];
     if (state == 0)
     {
       if (isConsonantStart(c)) // ~~~~~~~~~~~~ State 0 ~~~~~~~~~~~~
-      state = 6;
-    else if(isConsonantEnd(c))
-      state = 5;
-    else if(c == 's')
-      state = 4;
-    else if(isVowel(c))
-      state = 1;
-    else
-      state = -1;
-    }
-    else if(state == 1) // ~~~~~~~~~~~~ State 1 ~~~~~~~~~~~~
-    {
-      if(state == 1 && isVowel(c))
-        state = 1;
-      else if(isConsonantEnd(c))
-        state = 5;
-      else if(isConsonantStart(c))
         state = 6;
-      else if(c == 'n')
+      else if (isConsonantEnd(c))
+        state = 5;
+      else if (c == 's')
+        state = 4;
+      else if (isVowel(c))
+        state = 1;
+      else
+        state = -1;
+    }
+    else if (state == 1) // ~~~~~~~~~~~~ State 1 ~~~~~~~~~~~~
+    {
+      if (state == 1 && isVowel(c))
+        state = 1;
+      else if (c == 'n')
         state = 3;
-      else if(c == 's')
-        state = 4;
-      else if(c == 't')
-        state = 2;
-      else
-        state = -1;
-    }
-    else if(state == 2) // ~~~~~~~~~~~~ State 2 ~~~~~~~~~~~~
-    {
-      if(isVowel(c))
-        state = 1;
-      else if(c == 's')
+      else if (isConsonantEnd(c))
         state = 5;
-      else
-        state = -1;
-    }
-    else if(state == 3) // ~~~~~~~~~~~~ State 3 ~~~~~~~~~~~~
-    {
-      if(isVowel(c))
-        state = 1;
-      else if(c == 't')
-        state = 2;
-      else if(c == 's')
-        state = 4;
-      else if(c == 'c')
-        state = 7;
-      else if(isConsonantStart(c))
+      else if (isConsonantStart(c))
         state = 6;
-      else if(isConsonantEnd(c))
-        state = 5;
+      else if (c == 's')
+        state = 4;
+      else if (c == 't')
+        state = 2;
       else
         state = -1;
     }
-    else if(state == 4) // ~~~~~~~~~~~~ State 4 ~~~~~~~~~~~~
+    else if (state == 2) // ~~~~~~~~~~~~ State 2 ~~~~~~~~~~~~
     {
       if (isVowel(c))
         state = 1;
-      else if(c == 'h')
+      else if (c == 's')
         state = 5;
       else
         state = -1;
     }
-    else if(state == 5) // ~~~~~~~~~~~~ State 5 ~~~~~~~~~~~~
+    else if (state == 3) // ~~~~~~~~~~~~ State 3 ~~~~~~~~~~~~
     {
-      if(isVowel(c))
+      if (isVowel(c))
+        state = 1;
+      else if (c == 't')
+        state = 2;
+      else if (c == 's')
+        state = 4;
+      else if (c == 'c')
+        state = 7;
+      else if (isConsonantStart(c))
+        state = 6;
+      else if (isConsonantEnd(c))
+        state = 5;
+      else
+        state = -1;
+    }
+    else if (state == 4) // ~~~~~~~~~~~~ State 4 ~~~~~~~~~~~~
+    {
+      if (isVowel(c))
+        state = 1;
+      else if (c == 'h')
+        state = 5;
+      else
+        state = -1;
+    }
+    else if (state == 5) // ~~~~~~~~~~~~ State 5 ~~~~~~~~~~~~
+    {
+      if (isVowel(c))
         state = 1;
       else
         state = -1;
     }
-    else if(state == 6) // ~~~~~~~~~~~~ State 6 ~~~~~~~~~~~~
+    else if (state == 6) // ~~~~~~~~~~~~ State 6 ~~~~~~~~~~~~
     {
-      if(isVowel(c))
+      if (isVowel(c))
         state = 1;
-      else if(c == 'y')
+      else if (c == 'y')
         state = 5;
     }
-    else if(state == 7) // ~~~~~~~~~~~~ State 7 ~~~~~~~~~~~~
+    else if (state == 7) // ~~~~~~~~~~~~ State 7 ~~~~~~~~~~~~
     {
-      if(c == 'h')
+      if (c == 'h')
         state = 5;
       else
         state = -1;
@@ -132,7 +132,7 @@ bool word(string s)
   } // End of while
 
   // where did I end up????
-  if(state == 0 || state == 1 || state == 3)
+  if (state == 0 || state == 1 || state == 3)
   {
     return true;
   }
@@ -146,19 +146,19 @@ bool period(string s)
 {
   int state = 0;
   int charpos = 0;
-  while(s[charpos] != '\0')
+  while (s[charpos] != '\0')
   {
     char c = s[charpos];
 
-    if(state == 0 && c == '.')
+    if (state == 0 && c == '.')
       state = 1;
     else
       return false;
-    
+
     charpos++;
   } // End of loop
 
-  if(state == 1)
+  if (state == 1)
     return true;
   else
     return false;
@@ -166,16 +166,48 @@ bool period(string s)
 
 // ------ Three  Tables -------------------------------------
 
-// TABLES Done by: **
+// TABLES Done by: Jamison Coombs
 
 // ** Update the tokentype to be WORD1, WORD2, PERIOD, ERROR, EOFM, etc.
 enum tokentype
 {
+  WORD1,
+  WORD2,
+  PERIOD,
   ERROR,
+  EOFM,
+  VERB,
+  VERBNEG,
+  VERBPAST,
+  VERBPASTNEG,
+  IS,
+  WAS,
+  OBJECT,
+  SUBJECT,
+  DESTINATION,
+  PRONOUN,
+  CONNECTOR
 };
 
 // ** For the display names of tokens - must be in the same order as the tokentype.
-string tokenName[30] = {};
+string tokenName[30] = {
+  "WORD1",
+  "WORD2",
+  "PERIOD",
+  "ERROR",
+  "EOFM",
+  "VERB",
+  "VERBNEG",
+  "VERBPAST",
+  "VERBPASTNEG",
+  "IS",
+  "WAS",
+  "OBJECT",
+  "SUBJECT",
+  "DESTINATION",
+  "PRONOUN",
+  "CONNECTOR"
+};
 
 // ** Need the reservedwords table to be set up here.
 // ** Do not require any file input for this. Hard code the table.
@@ -193,7 +225,6 @@ int scanner(tokentype &tt, string &w)
 
   // ** Grab the next word from the file via fin
   // 1. If it is eofm, return right now.
-
   /*  **
   2. Call the token functions (word and period)
      one after another (if-then-else).
@@ -207,7 +238,43 @@ int scanner(tokentype &tt, string &w)
 
   4. Return the token type & string  (pass by reference)
   */
+  if (w == "eofm" || w == "EOFM")
+  {
+    tt = tokentype::EOFM;
+    return 0;
+  }
+  else if(period(w))
+  {
+    tt = tokentype::PERIOD;
+    return 0;
+  }
+  else if(word(w))
+  {
+    // TODO: Check against reserved words list
+    
 
+    char lastChar = w[w.size()-1];
+    if(lastChar == 'I' || lastChar == 'E')
+    {
+      tt = tokentype::WORD2;
+      return 0;
+    }
+    else if(isVowel(lastChar) || (isVowel(w[w.size()-2]) && lastChar == 'n'))
+    {
+      tt = tokentype::WORD1;
+      return 0;
+    }
+    else // does not match WORD1 or WORD2
+    {
+      tt = tokentype::ERROR;
+      return 1;
+    }
+  }
+  else
+  {
+    tt = tokentype::ERROR;
+    return 1;
+  }
 } // the end of scanner
 
 // The temporary test driver to just call the scanner repeatedly
@@ -226,7 +293,7 @@ int main()
   fin.open(filename.c_str());
 
   // the loop continues until eofm is returned.
-  while (true)
+  while (fin >> theword)
   {
     scanner(thetype, theword); // call the scanner which sets
                                // the arguments
