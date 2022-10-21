@@ -37,14 +37,16 @@ bool word(string s)
   while (s[charpos] != '\0')
   {
     char c = s[charpos];
-    if (state == 0)
+    if (state == 0) // ~~~~~~~~~~~~ State 0 ~~~~~~~~~~~~
     {
-      if (isConsonantStart(c)) // ~~~~~~~~~~~~ State 0 ~~~~~~~~~~~~
+      if (isConsonantStart(c)) 
         state = 6;
       else if (isConsonantEnd(c))
         state = 5;
       else if (c == 's')
         state = 4;
+      else if (c == 't')
+        state = 2;
       else if (isVowel(c))
         state = 1;
       else
@@ -213,6 +215,51 @@ string tokenName[30] = {
 // ** Do not require any file input for this. Hard code the table.
 // ** a.out should work without any additional files.
 
+
+bool checkForReserveWord(tokentype &tt, string &w)
+{
+  if(w == "masu")
+    tt = tokentype::VERB;
+  else if(w == "masen")
+    tt = tokentype::VERBNEG;
+  else if(w == "mashita")
+    tt = tokentype::VERBPAST;
+  else if(w == "masendeshita")
+    tt = tokentype::VERBPASTNEG;
+  else if(w == "desu")
+    tt = tokentype::IS;
+  else if(w == "deshita")
+    tt = tokentype::WAS;
+  else if(w == "o")
+    tt = tokentype::OBJECT;
+  else if(w == "wa")
+    tt = tokentype::SUBJECT;
+  else if(w == "ni")
+    tt = tokentype::DESTINATION;
+  else if(w == "watashi")
+    tt = tokentype::PRONOUN;
+  else if(w == "anata")
+    tt = tokentype::PRONOUN;
+  else if(w == "kare")
+    tt = tokentype::PRONOUN;
+  else if(w == "kanojo")
+    tt = tokentype::PRONOUN;
+  else if(w == "sore")
+    tt = tokentype::PRONOUN;
+  else if(w == "mata")
+    tt = tokentype::CONNECTOR;
+  else if(w == "soshite")
+    tt = tokentype::CONNECTOR;
+  else if(w == "shikashi")
+    tt = tokentype::CONNECTOR;
+  else if(w == "dakara")
+    tt = tokentype::CONNECTOR;
+  else
+    return false;
+
+  return true;
+}
+
 // ------------ Scanner and Driver -----------------------
 
 ifstream fin; // global stream for reading from the input file
@@ -238,6 +285,9 @@ int scanner(tokentype &tt, string &w)
 
   4. Return the token type & string  (pass by reference)
   */
+
+  fin >> w; // Grab the next word
+
   if (w == "eofm" || w == "EOFM")
   {
     tt = tokentype::EOFM;
@@ -251,6 +301,8 @@ int scanner(tokentype &tt, string &w)
   else if(word(w))
   {
     // TODO: Check against reserved words list
+    if(checkForReserveWord(tt, w))
+      return 0;
     
 
     char lastChar = w[w.size()-1];
@@ -293,7 +345,7 @@ int main()
   fin.open(filename.c_str());
 
   // the loop continues until eofm is returned.
-  while (fin >> theword)
+  while (true)
   {
     scanner(thetype, theword); // call the scanner which sets
                                // the arguments
