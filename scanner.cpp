@@ -6,29 +6,34 @@ using namespace std;
 /* Look for all **'s and complete them */
 
 //=====================================================
-// File scanner.cpp written by: Group Number: **
+// File scanner.cpp written by: Group Number: 14
 //=====================================================
 
-// --------- Two DFAs ---------------------------------
+// --------- Helper Functions ---------------------------------
 
+// Check if character is a starting consonant
 bool isConsonantStart(char c)
 {
   return (c == 'b' || c == 'g' || c == 'h' || c == 'k' || c == 'm' || c == 'n' || c == 'p' || c == 'r');
 }
 
+// Check if character is ending consonant
 bool isConsonantEnd(char c)
 {
   return (c == 'd' || c == 'w' || c == 'z' || c == 'y' || c == 'j');
 }
 
+// Check if character is a vowel
 bool isVowel(char c)
 {
   return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'E' || c == 'I');
 }
 
+// --------- Two DFAs ---------------------------------
+
 // WORD DFA
 // Done by: Jamison Coombs
-// RE:   Lilly <last-name>, Tim <last-name>
+// RE:   TODO: Put the regular expression here
 bool word(string s)
 {
   int state = 0;
@@ -37,7 +42,7 @@ bool word(string s)
   while (s[charpos] != '\0')
   {
     char c = s[charpos];
-    if (state == 0) // ~~~~~~~~~~~~ State 0 ~~~~~~~~~~~~
+    if (state == 0) // ~~~~~~~~~~~~ State 0 (q0) ~~~~~~~~~~~~
     {
       if (isConsonantStart(c)) 
         state = 6;
@@ -52,7 +57,7 @@ bool word(string s)
       else
         state = -1;
     }
-    else if (state == 1) // ~~~~~~~~~~~~ State 1 ~~~~~~~~~~~~
+    else if (state == 1) // ~~~~~~~~~~~~ State 1 (q0q1) ~~~~~~~~~~~~
     {
       if (state == 1 && isVowel(c))
         state = 1;
@@ -69,7 +74,7 @@ bool word(string s)
       else
         state = -1;
     }
-    else if (state == 2) // ~~~~~~~~~~~~ State 2 ~~~~~~~~~~~~
+    else if (state == 2) // ~~~~~~~~~~~~ State 2 (qt) ~~~~~~~~~~~~
     {
       if (isVowel(c))
         state = 1;
@@ -78,7 +83,7 @@ bool word(string s)
       else
         state = -1;
     }
-    else if (state == 3) // ~~~~~~~~~~~~ State 3 ~~~~~~~~~~~~
+    else if (state == 3) // ~~~~~~~~~~~~ State 3 (q0qy) ~~~~~~~~~~~~
     {
       if (isVowel(c))
         state = 1;
@@ -95,7 +100,7 @@ bool word(string s)
       else
         state = -1;
     }
-    else if (state == 4) // ~~~~~~~~~~~~ State 4 ~~~~~~~~~~~~
+    else if (state == 4) // ~~~~~~~~~~~~ State 4 (qs) ~~~~~~~~~~~~
     {
       if (isVowel(c))
         state = 1;
@@ -104,21 +109,23 @@ bool word(string s)
       else
         state = -1;
     }
-    else if (state == 5) // ~~~~~~~~~~~~ State 5 ~~~~~~~~~~~~
+    else if (state == 5) // ~~~~~~~~~~~~ State 5 (qsa) ~~~~~~~~~~~~
     {
       if (isVowel(c))
         state = 1;
       else
         state = -1;
     }
-    else if (state == 6) // ~~~~~~~~~~~~ State 6 ~~~~~~~~~~~~
+    else if (state == 6) // ~~~~~~~~~~~~ State 6 (qy) ~~~~~~~~~~~~
     {
       if (isVowel(c))
         state = 1;
       else if (c == 'y')
         state = 5;
+      else
+        state = -1;
     }
-    else if (state == 7) // ~~~~~~~~~~~~ State 7 ~~~~~~~~~~~~
+    else if (state == 7) // ~~~~~~~~~~~~ State 7 (qc) ~~~~~~~~~~~~
     {
       if (c == 'h')
         state = 5;
@@ -215,8 +222,17 @@ string tokenName[30] = {
 // ** Do not require any file input for this. Hard code the table.
 // ** a.out should work without any additional files.
 
-
-bool checkForReserveWord(tokentype &tt, string &w)
+/**
+ * @brief Check to see if a valid word from the word DFA is a reserve word.
+ *        If a reserve word match is found set the token type to the 
+ *        corresponding token type as found in reservedwords.txt
+ * 
+ * @param tt - Reference to the current token type
+ * @param w - Reference to the current word
+ * @return true - Reserved word found
+ * @return false - No reserve word found
+ */
+bool isReserveWord(tokentype &tt, string &w)
 {
   if(w == "masu")
     tt = tokentype::VERB;
@@ -270,9 +286,19 @@ ifstream fin; // global stream for reading from the input file
 int scanner(tokentype &tt, string &w)
 {
 
-  // ** Grab the next word from the file via fin
-  // 1. If it is eofm, return right now.
-  /*  **
+  /* Grab the next word from the file via fin
+   1. If it is eofm, return right now.
+  */
+
+  fin >> w; // Grab the next word
+
+  if (w == "eofm" || w == "EOFM") // Check for end of file
+  {
+    tt = tokentype::EOFM; // Set tokentype to EOFM
+    return 0;
+  }
+
+  /*
   2. Call the token functions (word and period)
      one after another (if-then-else).
      Generate a lexical error message if both DFAs failed.
@@ -285,39 +311,34 @@ int scanner(tokentype &tt, string &w)
 
   4. Return the token type & string  (pass by reference)
   */
-
-  fin >> w; // Grab the next word
-
-  if (w == "eofm" || w == "EOFM")
-  {
-    tt = tokentype::EOFM;
-    return 0;
-  }
-  else if(period(w))
+  else if(period(w)) // Check period DFA
   {
     tt = tokentype::PERIOD;
     return 0;
   }
-  else if(word(w))
+  else if(word(w)) // Check word DFA
   {
-    // TODO: Check against reserved words list
-    if(checkForReserveWord(tt, w))
+    // Check against reserved words list
+    if(isReserveWord(tt, w))
       return 0;
     
 
     char lastChar = w[w.size()-1];
-    if(lastChar == 'I' || lastChar == 'E')
+    if(lastChar == 'I' || lastChar == 'E') // Check if the last char is a capital I or E
     {
+      // If it is set tokentype to word2
       tt = tokentype::WORD2;
       return 0;
     }
-    else if(isVowel(lastChar) || (isVowel(w[w.size()-2]) && lastChar == 'n'))
+    else if(isVowel(lastChar) || (isVowel(w[w.size()-2]) && lastChar == 'n')) // Check if word ends in vowel or vowel -> 'n'
     {
+      // If so set tokentype to word1
       tt = tokentype::WORD1;
       return 0;
     }
     else // does not match WORD1 or WORD2
     {
+      // Set token type to error
       tt = tokentype::ERROR;
       return 1;
     }
