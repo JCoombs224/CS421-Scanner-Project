@@ -36,100 +36,100 @@ bool isVowel(char c)
 // RE:   TODO: Put the regular expression here
 bool word(string s)
 {
-  int state = 0;
-  int charpos = 0;
+  int state = 0; // set state to 0
+  int charpos = 0; // set character position to 0
 
   while (s[charpos] != '\0')
   {
-    char c = s[charpos];
+    char c = s[charpos]; // set char variable to character position
     if (state == 0) // ~~~~~~~~~~~~ State 0 (q0) ~~~~~~~~~~~~
     {
-      if (isConsonantStart(c)) 
+      if (isConsonantStart(c)) // bghkmnpr
         state = 6;
-      else if (isConsonantEnd(c))
+      else if (isConsonantEnd(c)) // dwzj
         state = 5;
-      else if (c == 's')
+      else if (c == 's') // s
         state = 4;
-      else if (c == 't')
+      else if (c == 't') // t
         state = 2;
-      else if (isVowel(c))
+      else if (isVowel(c)) // aeiouIE
         state = 1;
-      else
+      else // Error state
         state = -1;
     }
     else if (state == 1) // ~~~~~~~~~~~~ State 1 (q0q1) ~~~~~~~~~~~~
     {
-      if (state == 1 && isVowel(c))
+      if (state == 1 && isVowel(c)) // aeiouIE
         state = 1;
-      else if (c == 'n')
+      else if (c == 'n') // n
         state = 3;
-      else if (isConsonantEnd(c))
+      else if (isConsonantEnd(c)) // dwzj
         state = 5;
-      else if (isConsonantStart(c))
+      else if (isConsonantStart(c)) // bghkmnpr
         state = 6;
-      else if (c == 's')
+      else if (c == 's') // s
         state = 4;
-      else if (c == 't')
+      else if (c == 't') // t
         state = 2;
-      else
+      else // error state
         state = -1;
     }
     else if (state == 2) // ~~~~~~~~~~~~ State 2 (qt) ~~~~~~~~~~~~
-    {
-      if (isVowel(c))
+    { 
+      if (isVowel(c)) // aeiouIE
         state = 1;
-      else if (c == 's')
+      else if (c == 's') // s
         state = 5;
-      else
+      else // error state
         state = -1;
     }
     else if (state == 3) // ~~~~~~~~~~~~ State 3 (q0qy) ~~~~~~~~~~~~
     {
-      if (isVowel(c))
+      if (isVowel(c)) // aeiouIE
         state = 1;
-      else if (c == 't')
+      else if (c == 't') // t
         state = 2;
-      else if (c == 's')
+      else if (c == 's') // s
         state = 4;
-      else if (c == 'c')
+      else if (c == 'c') // c
         state = 7;
-      else if (isConsonantStart(c))
+      else if (isConsonantStart(c)) // bghkmnpr
         state = 6;
-      else if (isConsonantEnd(c))
+      else if (isConsonantEnd(c)) // dwzj
         state = 5;
-      else
+      else // error state
         state = -1;
     }
     else if (state == 4) // ~~~~~~~~~~~~ State 4 (qs) ~~~~~~~~~~~~
     {
-      if (isVowel(c))
+      if (isVowel(c)) // aeiouIE
         state = 1;
-      else if (c == 'h')
+      else if (c == 'h') // h
         state = 5;
-      else
+      else // error state
         state = -1;
     }
     else if (state == 5) // ~~~~~~~~~~~~ State 5 (qsa) ~~~~~~~~~~~~
     {
-      if (isVowel(c))
+      if (isVowel(c)) // aeiouIE
         state = 1;
-      else
+      else // error state
         state = -1;
     }
     else if (state == 6) // ~~~~~~~~~~~~ State 6 (qy) ~~~~~~~~~~~~
     {
-      if (isVowel(c))
+      if (isVowel(c)) // aeiouIE
         state = 1;
-      else if (c == 'y')
+      else if (c == 'y') // y
         state = 5;
-      else
+      else // error state
         state = -1;
     }
     else if (state == 7) // ~~~~~~~~~~~~ State 7 (qc) ~~~~~~~~~~~~
     {
-      if (c == 'h')
+      if (c == 'h') // h
         state = 5;
-      else
+      else // error state
         state = -1;
     }
     else // ~~~~~~~~~~~~ Error State ~~~~~~~~~~~~
@@ -137,40 +137,38 @@ bool word(string s)
       return false;
     }
 
-    charpos++;
+    charpos++; // increment character position
   } // End of while
 
   // where did I end up????
-  if (state == 0 || state == 1 || state == 3)
-  {
-    return true;
-  }
+  if (state == 0 || state == 1 || state == 3) // Check if ended in valid end state
+    return true; // if so passes dfa
   else
-    return false;
+    return false; // if not fails dfa
 }
 
 // PERIOD DFA
 // Done by: Jamison Coombs
 bool period(string s)
 {
-  int state = 0;
-  int charpos = 0;
+  int state = 0; // set state to 0
+  int charpos = 0; // set char state to 0
   while (s[charpos] != '\0')
   {
-    char c = s[charpos];
+    char c = s[charpos]; // set char variable to char at char position
 
-    if (state == 0 && c == '.')
+    if (state == 0 && c == '.') // check if the current char is a '.'
       state = 1;
     else
-      return false;
+      return false; // return false if not
 
-    charpos++;
+    charpos++; // increment char pos
   } // End of loop
 
-  if (state == 1)
-    return true;
+  if (state == 1) // check that string ends in a valid ending state
+    return true; // if so passes dfa
   else
-    return false;
+    return false; // if not fails dfa
 }
 
 // ------ Three  Tables -------------------------------------
@@ -234,42 +232,42 @@ string tokenName[30] = {
  */
 bool isReserveWord(tokentype &tt, string &w)
 {
-  if(w == "masu")
-    tt = tokentype::VERB;
-  else if(w == "masen")
-    tt = tokentype::VERBNEG;
-  else if(w == "mashita")
-    tt = tokentype::VERBPAST;
-  else if(w == "masendeshita")
-    tt = tokentype::VERBPASTNEG;
-  else if(w == "desu")
-    tt = tokentype::IS;
-  else if(w == "deshita")
-    tt = tokentype::WAS;
-  else if(w == "o")
-    tt = tokentype::OBJECT;
-  else if(w == "wa")
-    tt = tokentype::SUBJECT;
-  else if(w == "ni")
-    tt = tokentype::DESTINATION;
-  else if(w == "watashi")
-    tt = tokentype::PRONOUN;
-  else if(w == "anata")
-    tt = tokentype::PRONOUN;
-  else if(w == "kare")
-    tt = tokentype::PRONOUN;
-  else if(w == "kanojo")
-    tt = tokentype::PRONOUN;
-  else if(w == "sore")
-    tt = tokentype::PRONOUN;
-  else if(w == "mata")
-    tt = tokentype::CONNECTOR;
-  else if(w == "soshite")
-    tt = tokentype::CONNECTOR;
-  else if(w == "shikashi")
-    tt = tokentype::CONNECTOR;
-  else if(w == "dakara")
-    tt = tokentype::CONNECTOR;
+  if(w == "masu") // check for reserved word "masu"
+    tt = tokentype::VERB; // set token type to verb
+  else if(w == "masen") // check for reserved word "masen"
+    tt = tokentype::VERBNEG; // set token type to verb negative
+  else if(w == "mashita") // check for reserved word "mashita"
+    tt = tokentype::VERBPAST; // set token type to verb past
+  else if(w == "masendeshita") // check for reserved word "masendeshita"
+    tt = tokentype::VERBPASTNEG; // set token type to verb past neg
+  else if(w == "desu") // check for reserved word "desu"
+    tt = tokentype::IS; // set token type to is
+  else if(w == "deshita") // check for reserved word "deshita"
+    tt = tokentype::WAS; // set token type to was
+  else if(w == "o") // check for reserved word "o"
+    tt = tokentype::OBJECT; // set token type to object
+  else if(w == "wa") // check for reserved word "wa"
+    tt = tokentype::SUBJECT; // set token type to subject
+  else if(w == "ni") // check for reserved word "ni"
+    tt = tokentype::DESTINATION; // set token type to destination
+  else if(w == "watashi") // check for reserved word "watashi"
+    tt = tokentype::PRONOUN; // set token type to pronoun
+  else if(w == "anata") // check for reserved word "anata"
+    tt = tokentype::PRONOUN; // set token type to pronoun
+  else if(w == "kare") // check for reserved word "kare"
+    tt = tokentype::PRONOUN; // set token type to pronoun
+  else if(w == "kanojo") // check for reserved word "kanojo"
+    tt = tokentype::PRONOUN; // set token type to pronoun
+  else if(w == "sore") // check for reserved word "sore"
+    tt = tokentype::PRONOUN; // set token type to pronoun
+  else if(w == "mata") // check for reserved word "mata"
+    tt = tokentype::CONNECTOR; // set token type to connector
+  else if(w == "soshite") // check for reserved word "soshite"
+    tt = tokentype::CONNECTOR; // set token type to connector
+  else if(w == "shikashi") // check for reserved word "shikashi"
+    tt = tokentype::CONNECTOR; // set token type to connector
+  else if(w == "dakara") // check for reserved word "dakara"
+    tt = tokentype::CONNECTOR; // set token type to connector
   else
     return false;
 
@@ -313,12 +311,12 @@ int scanner(tokentype &tt, string &w)
   */
   else if(period(w)) // Check period DFA
   {
-    tt = tokentype::PERIOD;
+    tt = tokentype::PERIOD; // if passes dfa set token type to period
     return 0;
   }
   else if(word(w)) // Check word DFA
   {
-    // Check against reserved words list
+    // Check word against reserved words list
     if(isReserveWord(tt, w))
       return 0;
     
