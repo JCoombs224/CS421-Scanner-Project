@@ -261,7 +261,7 @@ bool isReserveWord(tokentype &tt, string &w)
   else if(w == "sore") // check for reserved word "sore"
     tt = PRONOUN; // set token type to pronoun
   else if(w == "mata") // check for reserved word "mata"
-    tt = tokentype::CONNECTOR; // set token type to connector
+    tt = CONNECTOR; // set token type to connector
   else if(w == "soshite") // check for reserved word "soshite"
     tt = CONNECTOR; // set token type to connector
   else if(w == "shikashi") // check for reserved word "shikashi"
@@ -292,7 +292,7 @@ int scanner(tokentype &tt, string &w)
 
   if (w == "eofm" || w == "EOFM") // Check for end of file
   {
-    tt = tokentype::EOFM; // Set tokentype to EOFM
+    tt = EOFM; // Set tokentype to EOFM
     return 0;
   }
 
@@ -311,7 +311,7 @@ int scanner(tokentype &tt, string &w)
   */
   else if(period(w)) // Check period DFA
   {
-    tt = tokentype::PERIOD; // if passes dfa set token type to period
+    tt = PERIOD; // if passes dfa set token type to period
     return 0;
   }
   else if(word(w)) // Check word DFA
@@ -325,25 +325,25 @@ int scanner(tokentype &tt, string &w)
     if(lastChar == 'I' || lastChar == 'E') // Check if the last char is a capital I or E
     {
       // If it is set tokentype to word2
-      tt = tokentype::WORD2;
+      tt = WORD2;
       return 0;
     }
     else if(isVowel(lastChar) || (isVowel(w[w.size()-2]) && lastChar == 'n')) // Check if word ends in vowel or vowel -> 'n'
     {
       // If so set tokentype to word1
-      tt = tokentype::WORD1;
+      tt = WORD1;
       return 0;
     }
     else // does not match WORD1 or WORD2
     {
       // Set token type to error
-      tt = tokentype::ERROR;
+      tt = ERROR;
       return 1;
     }
   }
   else
   {
-    tt = tokentype::ERROR;
+    tt = ERROR;
     return 1;
   }
 } // the end of scanner
