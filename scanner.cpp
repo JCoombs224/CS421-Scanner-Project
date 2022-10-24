@@ -173,7 +173,7 @@ bool period(string s)
 
 // ------ Three  Tables -------------------------------------
 
-// TABLES Done by: Jamison Coombs
+// TABLES Done by: Jamison Coombs, Lilly Mcgraw, Tim Nguyen
 
 // ** Update the tokentype to be WORD1, WORD2, PERIOD, ERROR, EOFM, etc.
 enum tokentype
@@ -280,7 +280,7 @@ ifstream fin; // global stream for reading from the input file
 
 // Scanner processes only one word each time it is called
 // Gives back the token type and the word itself
-// ** Done by:
+// ** Done by: Jamison Coombs, Lilly Mcgraw, Tim Nguyen
 int scanner(tokentype &tt, string &w)
 {
 
