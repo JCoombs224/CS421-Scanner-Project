@@ -233,41 +233,41 @@ string tokenName[30] = {
 bool isReserveWord(tokentype &tt, string &w)
 {
   if(w == "masu") // check for reserved word "masu"
-    tt = tokentype::VERB; // set token type to verb
+    tt = VERB; // set token type to verb
   else if(w == "masen") // check for reserved word "masen"
-    tt = tokentype::VERBNEG; // set token type to verb negative
+    tt = VERBNEG; // set token type to verb negative
   else if(w == "mashita") // check for reserved word "mashita"
-    tt = tokentype::VERBPAST; // set token type to verb past
+    tt = VERBPAST; // set token type to verb past
   else if(w == "masendeshita") // check for reserved word "masendeshita"
-    tt = tokentype::VERBPASTNEG; // set token type to verb past neg
+    tt = VERBPASTNEG; // set token type to verb past neg
   else if(w == "desu") // check for reserved word "desu"
-    tt = tokentype::IS; // set token type to is
+    tt = IS; // set token type to is
   else if(w == "deshita") // check for reserved word "deshita"
-    tt = tokentype::WAS; // set token type to was
+    tt = WAS; // set token type to was
   else if(w == "o") // check for reserved word "o"
-    tt = tokentype::OBJECT; // set token type to object
+    tt = OBJECT; // set token type to object
   else if(w == "wa") // check for reserved word "wa"
-    tt = tokentype::SUBJECT; // set token type to subject
+    tt = SUBJECT; // set token type to subject
   else if(w == "ni") // check for reserved word "ni"
-    tt = tokentype::DESTINATION; // set token type to destination
+    tt = DESTINATION; // set token type to destination
   else if(w == "watashi") // check for reserved word "watashi"
-    tt = tokentype::PRONOUN; // set token type to pronoun
+    tt = PRONOUN; // set token type to pronoun
   else if(w == "anata") // check for reserved word "anata"
-    tt = tokentype::PRONOUN; // set token type to pronoun
+    tt = PRONOUN; // set token type to pronoun
   else if(w == "kare") // check for reserved word "kare"
-    tt = tokentype::PRONOUN; // set token type to pronoun
+    tt = PRONOUN; // set token type to pronoun
   else if(w == "kanojo") // check for reserved word "kanojo"
-    tt = tokentype::PRONOUN; // set token type to pronoun
+    tt = PRONOUN; // set token type to pronoun
   else if(w == "sore") // check for reserved word "sore"
-    tt = tokentype::PRONOUN; // set token type to pronoun
+    tt = PRONOUN; // set token type to pronoun
   else if(w == "mata") // check for reserved word "mata"
     tt = tokentype::CONNECTOR; // set token type to connector
   else if(w == "soshite") // check for reserved word "soshite"
-    tt = tokentype::CONNECTOR; // set token type to connector
+    tt = CONNECTOR; // set token type to connector
   else if(w == "shikashi") // check for reserved word "shikashi"
-    tt = tokentype::CONNECTOR; // set token type to connector
+    tt = CONNECTOR; // set token type to connector
   else if(w == "dakara") // check for reserved word "dakara"
-    tt = tokentype::CONNECTOR; // set token type to connector
+    tt = CONNECTOR; // set token type to connector
   else
     return false;
 
