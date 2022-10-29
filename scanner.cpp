@@ -33,7 +33,8 @@ bool isVowel(char c)
 
 // WORD DFA
 // Done by: Jamison Coombs
-// RE:   TODO: Put the regular expression here
+// RE: (V | dwzyj V | c h V | s V | s h V | t V | t h V | bghkmnpr V | bghkmnpr y V | V n | dwzyj V n 
+//      | c h V n | s V n | s h V n | t V n | t h V n | bghkmnpr V n | bghkmnpr y V n)^+            
 bool word(string s)
 {
   int state = 0; // set state to 0
